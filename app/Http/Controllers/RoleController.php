@@ -10,6 +10,15 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
+        public function __construct()
+    {
+        $this->middleware('can:perfis.listar')->only('index');
+        $this->middleware('can:perfis.criar')->only(['create', 'store']);
+        $this->middleware('can:perfis.editar')->only(['edit', 'update']);
+        $this->middleware('can:perfis.excluir')->only('destroy');
+        $this->middleware('can:perfis.visualizar')->only('show');
+    }
+
     public function index()
     {
         $roles = Role::paginate(15);
@@ -26,7 +35,7 @@ class RoleController extends Controller
     {
         $validated = $request->validated();
         $validated['guard_name'] = $validated['guard_name'] ?? 'web';
-        
+
         $role = Role::create($validated);
         $role->syncPermissions($request->permissions ?? []);
         return redirect()->route('roles.index')->with('success', 'Perfil criado com sucesso!');
@@ -43,7 +52,7 @@ class RoleController extends Controller
     {
         $validated = $request->validated();
         $validated['guard_name'] = $validated['guard_name'] ?? 'web';
-        
+
         $role->update($validated);
         $role->syncPermissions($request->permissions ?? []);
         return redirect()->route('roles.index')->with('success', 'Perfil atualizado com sucesso!');
