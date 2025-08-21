@@ -1,61 +1,243 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Projeto Base Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Blade](https://img.shields.io/badge/Blade-Templates-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Um projeto Laravel completo e pronto para uso com sistema de permissões robusto**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+</div>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📋 Sobre o Projeto
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Este é um **projeto base Laravel** desenvolvido com muito carinho para a comunidade de desenvolvedores. Meu objetivo é fornecer uma base sólida e bem estruturada que possa ser utilizada como ponto de partida para diversos tipos de aplicações web.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+O projeto foi criado pensando em **economizar tempo** e **facilitar o desenvolvimento** de novas aplicações, oferecendo uma estrutura robusta com as melhores práticas do mercado já implementadas.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 💡 Por que este projeto existe?
 
-## Laravel Sponsors
+- **Para a comunidade**: Acredito no poder do código aberto e na importância de compartilhar conhecimento
+- **Acelerar desenvolvimento**: Evite recriar a roda em cada novo projeto
+- **Boas práticas**: Estrutura já validada e testada em projetos reais
+- **Aprendizado**: Código limpo e bem documentado para estudos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🛠️ Stack Tecnológica
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Backend
+- **Laravel 12** - Framework PHP robusto e elegante
+- **PHP 8.2+** - Linguagem de programação moderna
+- **MySQL 8.0+** - Banco de dados relacional confiável
 
-## Contributing
+### Frontend
+- **Blade Templates** - Sistema de templates nativo do Laravel
+- **Tabler UI** - Interface moderna e responsiva
+- **Tailwind CSS** - Framework CSS utilitário
+- **Vite** - Build tool rápido e moderno
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Funcionalidades
+- **Spatie/Permission** - Sistema completo de permissões e roles
+- **Sistema de Autenticação** - Login, registro e recuperação de senha
+- **Dashboard Responsivo** - Interface administrativa moderna
+- **Validação de CPF** - Regra customizada para validação
+- **Testes Automatizados** - PHPUnit configurado
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🚀 Instalação e Configuração
 
-## Security Vulnerabilities
+### Pré-requisitos
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Certifique-se de ter instalado em sua máquina:
+- PHP 8.2 ou superior
+- Composer
+- Node.js e NPM
+- MySQL 8.0 ou superior
+- Git
 
-## License
+### Passo a Passo
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Clone o repositório**
+```bash
+git clone https://github.com/rafaelcacote/projeto-base.git
+cd projeto-base
+```
+
+2. **Instale as dependências do PHP**
+```bash
+composer update
+```
+
+3. **Instale as dependências do Node.js**
+```bash
+npm install
+```
+
+4. **Configure o arquivo de ambiente**
+```bash
+cp .env.example .env
+```
+
+5. **Gere a chave da aplicação**
+```bash
+php artisan key:generate
+```
+
+6. **Configure o banco de dados**
+Edite o arquivo `.env` com suas credenciais do MySQL:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=seu_banco_de_dados
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
+
+7. **Execute as migrações**
+```bash
+php artisan migrate
+```
+
+8. **Popule o banco com dados iniciais**
+```bash
+php artisan db:seed
+```
+
+9. **Compile os assets**
+```bash
+npm run build
+```
+
+10. **Inicie o servidor de desenvolvimento**
+```bash
+php artisan serve
+```
+
+🎉 **Pronto!** Acesse `http://localhost:8000` e comece a usar sua aplicação.
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+projeto-base/
+├── app/
+│   ├── Http/Controllers/     # Controladores
+│   ├── Models/              # Modelos Eloquent
+│   ├── Rules/               # Regras de validação customizadas
+│   └── Providers/           # Provedores de serviços
+├── database/
+│   ├── migrations/          # Migrações do banco
+│   ├── seeders/            # Seeders para popular dados
+│   └── factories/          # Factories para testes
+├── resources/
+│   ├── views/              # Templates Blade
+│   ├── css/                # Estilos CSS
+│   └── js/                 # JavaScript
+├── routes/
+│   ├── web.php             # Rotas web
+│   └── auth.php            # Rotas de autenticação
+└── tests/                  # Testes automatizados
+```
+
+---
+
+## 🔐 Sistema de Permissões
+
+O projeto inclui um sistema completo de permissões usando **Spatie/Permission**:
+
+### Funcionalidades
+- ✅ **Roles (Papéis)**: Agrupe permissões por função
+- ✅ **Permissions (Permissões)**: Controle granular de acesso
+- ✅ **Middleware**: Proteção de rotas automática
+- ✅ **Interface Administrativa**: Gerencie permissões via web
+
+### Uso Básico
+```php
+// Verificar permissão
+if (auth()->user()->can('edit users')) {
+    // Usuário pode editar usuários
+}
+
+// Verificar role
+if (auth()->user()->hasRole('admin')) {
+    // Usuário é administrador
+}
+```
+
+---
+
+## 🎨 Interface (Tabler UI)
+
+O projeto utiliza o **Tabler UI**, um template moderno e responsivo que oferece:
+
+- 📱 **Design Responsivo**: Funciona perfeitamente em todos os dispositivos
+- 🎨 **Componentes Ricos**: Botões, formulários, tabelas e muito mais
+- 📊 **Dashboard Moderno**: Interface administrativa profissional
+- ⚡ **Performance**: Carregamento rápido e otimizado
+
+---
+
+## 🧪 Testes
+
+Execute os testes automatizados:
+
+```bash
+# Todos os testes
+php artisan test
+
+# Testes específicos
+php artisan test --filter=ExampleTest
+```
+
+---
+
+## 🤝 Contribuindo
+
+Contribuições são sempre bem-vindas! Para contribuir:
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## 👨‍💻 Autor
+
+**Rafael Barbosa**
+- GitHub: [@rafaelcacote](https://github.com/rafaelcacote)
+- LinkedIn: [Rafael Barbosa](https://linkedin.com/in/rafaelcacote)
+
+---
+
+## 💝 Agradecimentos
+
+- À comunidade Laravel por criar um framework incrível
+- Ao time do Spatie pelos pacotes fantásticos
+- À equipe do Tabler UI pelo template elegante
+- A todos os desenvolvedores que contribuem para o ecossistema open source
+
+---
+
+<div align="center">
+
+**⭐ Se este projeto te ajudou, não esqueça de dar uma estrela!**
+
+**🚀 Bora codar juntos e fazer a diferença na comunidade!**
+
+</div>
