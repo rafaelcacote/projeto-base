@@ -103,22 +103,22 @@
             border: 1px solid #ddd;
             padding: 0.5rem;
             border-radius: 0.375rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         /* Media Queries para Responsividade */
-        
+
         /* Tablets e telas médias (768px - 1023px) */
         @media (max-width: 1023px) {
             .sidebar {
                 width: 240px;
             }
-            
+
             .main-content {
                 margin-left: 240px;
                 width: calc(100vw - 240px);
             }
-            
+
             .content-area .container-xl,
             .content-area .container,
             .content-area .page-wrapper {
@@ -133,27 +133,27 @@
                 transform: translateX(-100%);
                 width: 280px;
             }
-            
+
             .sidebar.active {
                 transform: translateX(0);
             }
-            
+
             .main-content {
                 margin-left: 0;
                 width: 100vw;
             }
-            
+
             .sidebar-toggle {
                 display: block;
             }
-            
+
             .content-area .container-xl,
             .content-area .container,
             .content-area .page-wrapper {
                 padding-left: 0.5rem;
                 padding-right: 0.5rem;
             }
-            
+
             /* Overlay para mobile quando sidebar está aberto */
             .sidebar-overlay {
                 display: none;
@@ -162,10 +162,10 @@
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                background: rgba(0,0,0,0.5);
+                background: rgba(0, 0, 0, 0.5);
                 z-index: 999;
             }
-            
+
             .sidebar-overlay.active {
                 display: block;
             }
@@ -173,18 +173,19 @@
 
         /* Telas muito pequenas (até 480px) */
         @media (max-width: 480px) {
+
             .content-area .container-xl,
             .content-area .container,
             .content-area .page-wrapper {
                 padding-left: 0.25rem;
                 padding-right: 0.25rem;
             }
-            
+
             .header-area .px-8 {
                 padding-left: 0.5rem !important;
                 padding-right: 0.5rem !important;
             }
-            
+
             .header-area .lg\:px-16 {
                 padding-left: 0.5rem !important;
                 padding-right: 0.5rem !important;
@@ -197,7 +198,7 @@
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch;
             }
-            
+
             .card {
                 margin-bottom: 1rem;
             }
@@ -206,9 +207,17 @@
 </head>
 
 <body class="font-sans antialiased bg-gray-100">
+    <!-- Botão toggle para mobile -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Overlay para mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="layout-container">
         {{-- Menu/Navegação lateral --}}
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             @include('layouts.navigation')
         </div>
 
@@ -240,6 +249,35 @@
         </div>
     </div>
     <script src="{{ asset('tabler/js/tabler.min.js') }}"></script>
+
+    <!-- Script para controle do sidebar mobile -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            // Toggle sidebar
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            // Fechar sidebar ao clicar no overlay
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // Fechar sidebar ao redimensionar para desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 767) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
