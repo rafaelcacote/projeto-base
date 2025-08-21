@@ -137,22 +137,74 @@
                             </div>
 
                             <hr class="my-4">
-                            <h4 class="card-title">Perfis do Usuário</h4>
+                            <h4 class="card-title">Perfil de Acesso</h4>
                             
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">
-                                        <label class="form-label">Perfis</label>
-                                        <select name="roles[]" class="form-select" multiple>
-                                            @foreach($roles ?? [] as $role)
-                                                <option value="{{ $role->id }}" {{ $user->roles->contains($role) || in_array($role->id, old('roles', [])) ? 'selected' : '' }}>
-                                                    {{ $role->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <small class="form-hint">Selecione os perfis para este usuário</small>
-                                        @error('roles')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        <label class="form-label">Selecione o Perfil</label>
+                                        <div class="row">
+                                            @php
+                                                $userRole = $user->roles->first()?->name;
+                                            @endphp
+                                            
+                                            <div class="col-lg-6 col-xl-4 mb-3">
+                                                <label class="form-check form-check-single-select">
+                                                    <input class="form-check-input" type="radio" name="role" value="" {{ empty($userRole) ? 'checked' : '' }}>
+                                                    <span class="form-check-label">
+                                                        <span class="form-check-description">
+                                                            <span class="h4 d-block">
+                                                                <i class="fa-solid fa-user me-2 text-secondary"></i>
+                                                                Sem Perfil
+                                                            </span>
+                                                            <span class="text-secondary">
+                                                                Acesso limitado
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            
+                                            @forelse($roles ?? [] as $role)
+                                                <div class="col-lg-6 col-xl-4 mb-3">
+                                                    <label class="form-check form-check-single-select">
+                                                        <input class="form-check-input" type="radio" name="role" value="{{ $role->name }}" {{ $userRole == $role->name ? 'checked' : '' }}>
+                                                        <span class="form-check-label">
+                                                            <span class="form-check-description">
+                                                                <span class="h4 d-block">
+                                                                    <i class="fa-solid fa-user-shield me-2 text-primary"></i>
+                                                                    {{ $role->name }}
+                                                                </span>
+                                                                <span class="text-secondary">
+                                                                    {{ $role->permissions->count() }} {{ $role->permissions->count() == 1 ? 'permissão' : 'permissões' }}
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            @empty
+                                                <div class="col-12">
+                                                    <div class="empty">
+                                                        <div class="empty-icon">
+                                                            <i class="fa-solid fa-user-shield"></i>
+                                                        </div>
+                                                        <p class="empty-title">Nenhum perfil encontrado</p>
+                                                        <p class="empty-subtitle text-secondary">
+                                                            Crie perfis antes de atribuí-los aos usuários.
+                                                        </p>
+                                                        <div class="empty-action">
+                                                            <a href="{{ route('roles.create') }}" class="btn btn-primary">
+                                                                <i class="fa-solid fa-plus me-2"></i>
+                                                                Criar Perfil
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforelse
+                                        </div>
+                                        <small class="form-hint">Selecione um perfil para definir as permissões do usuário</small>
+                                        @error('role')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>

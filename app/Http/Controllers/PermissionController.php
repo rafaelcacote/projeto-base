@@ -9,9 +9,27 @@ use App\Http\Requests\UpdatePermissionRequest;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $permissions = Permission::paginate(15);
+        $perPage = 10;
+        
+        $query = Permission::query();
+        
+        // Filtro por nome da permissão
+        if ($request->filled('search_name')) {
+            $query->where('name', 'like', '%' . $request->search_name . '%');
+        }
+        
+        // Filtro por módulo (primeira parte do nome)
+        if ($request->filled('search_module')) {
+            $query->where('name', 'like', $request->search_module . '.%');
+        }
+        
+        $permissions = $query->paginate($perPage);
+        
+        // Manter os parâmetros de busca na paginação
+        $permissions->appends($request->query());
+        
         return view('permissions.index', compact('permissions'));
     }
 

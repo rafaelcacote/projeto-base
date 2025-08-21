@@ -11,9 +11,36 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        $users = User::all();
+        $this->middleware('can:usuarios.listar')->only('index');
+        $this->middleware('can:usuarios.criar')->only(['create', 'store']);
+        $this->middleware('can:usuarios.editar')->only(['edit', 'update']);
+        $this->middleware('can:usuarios.excluir')->only('destroy');
+    }
+    
+    public function index(Request $request)
+    {
+        $perPage = 10; // Defina aqui a quantidade de usuários por página
+        
+        $query = User::query();
+        
+        // Filtro por nome
+        if ($request->filled('search_name')) {
+            $query->where('name', 'like', '%' . $request->search_name . '%');
+        }
+        
+        // Filtro por CPF
+        if ($request->filled('search_cpf')) {
+            $cpf = preg_replace('/[^0-9]/', '', $request->search_cpf);
+            $query->where('cpf', 'like', '%' . $cpf . '%');
+        }
+        
+        $users = $query->paginate($perPage);
+        
+        // Manter os parâmetros de busca na paginação
+        $users->appends($request->query());
+        
         return view('users.index', compact('users'));
     }
 
@@ -36,9 +63,9 @@ class UserController extends Controller
         
         $user = User::create($validated);
         
-        // Atribuir perfis ao usuário
-        if ($request->has('roles')) {
-            $user->assignRole($request->roles);
+        // Atribuir perfil ao usuário
+        if ($request->has('role') && !empty($request->role)) {
+            $user->assignRole($request->role);
         }
         
         return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso!');
@@ -72,9 +99,9 @@ class UserController extends Controller
         
         $user->update($validated);
         
-        // Atualizar perfis do usuário
-        if ($request->has('roles')) {
-            $user->syncRoles($request->roles);
+        // Atualizar perfil do usuário
+        if ($request->has('role') && !empty($request->role)) {
+            $user->syncRoles([$request->role]);
         } else {
             $user->syncRoles([]);
         }

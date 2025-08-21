@@ -16,6 +16,7 @@
                 </div>
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
+                        @can('usuarios.criar')
                         <a href="{{ route('users.create') }}" class="btn btn-primary d-none d-sm-inline-block">
                             <i class="fa-solid fa-plus icon"></i>
                             Novo Usuário
@@ -23,6 +24,7 @@
                         <a href="{{ route('users.create') }}" class="btn btn-primary d-sm-none btn-icon">
                             <i class="fa-solid fa-plus icon"></i>
                         </a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -49,6 +51,51 @@
                 </div>
             @endif
 
+            <!-- Filtros de Pesquisa -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="GET" action="{{ route('users.index') }}" class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="search_name" class="form-label">Nome</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-solid fa-user"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="search_name" name="search_name" 
+                                               value="{{ request('search_name') }}" placeholder="Pesquisar por nome...">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="search_cpf" class="form-label">CPF</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-solid fa-id-card"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="search_cpf" name="search_cpf" 
+                                               value="{{ request('search_cpf') }}" placeholder="Pesquisar por CPF..." 
+                                               data-mask="000.000.000-00">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <div class="btn-group w-100" role="group">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa-solid fa-search me-1"></i>
+                                            Pesquisar
+                                        </button>
+                                        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
+                                            <i class="fa-solid fa-times me-1"></i>
+                                            Limpar
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -61,7 +108,22 @@
                                 </a> -->
                             </div>
                         </div>
-                        <div class="table-responsive" style="min-width:100%;">
+                        <div class="table-responsive position-relative" style="min-width:100%;" id="table-container">
+                            <!-- Loading Overlay -->
+                            <div id="table-loading" class="position-absolute w-100 h-100 d-none" style="top: 0; left: 0; background: rgba(255,255,255,0.8); z-index: 10;">
+                                <div class="d-flex justify-content-center align-items-center h-100">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-primary mb-3" role="status">
+                                            <span class="visually-hidden">Carregando...</span>
+                                        </div>
+                                        <div class="text-muted">
+                                            <i class="fa-solid fa-search me-2"></i>
+                                            Pesquisando usuários...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <table class="table table-vcenter card-table w-100" style="min-width:1200px;">
                                 <thead>
                                     <tr>
@@ -69,6 +131,7 @@
                                         <th>Usuário</th>
                                         <th>E-mail</th>
                                         <th>CPF</th>
+                                        <th>Perfil</th>
                                         <th>Data de Criação</th>
                                         <th class="w-1">Ações</th>
                                     </tr>
@@ -100,20 +163,36 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
+                                        <td>
+                                            @if($user->roles->isNotEmpty())
+                                                <span class="badge bg-purple-lt">
+                                                    <i class="fa-solid fa-user-shield me-1"></i>
+                                                    {{ $user->roles->first()->name }}
+                                                </span>
+                                            @else
+                                                <span class="text-muted">Sem perfil</span>
+                                            @endif
+                                        </td>
                                         <td class="text-muted">
                                             {{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : '-' }}
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
+                                                @can('usuarios.visualizar')
                                                 <a href="{{ route('users.show', $user) }}" class="action-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Visualizar">
                                                     <i class="fa-solid fa-eye fa-lg text-primary"></i>
                                                 </a>
+                                                @endcan
+                                                @can('usuarios.editar')
                                                 <a href="{{ route('users.edit', $user) }}" class="action-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
                                                     <i class="fa-solid fa-pen-to-square fa-lg text-warning"></i>
                                                 </a>
+                                                @endcan
+                                                @can('usuarios.excluir')
                                                 <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}" title="Excluir">
                                                     <i class="fa-solid fa-trash fa-lg text-danger"></i>
                                                 </a>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>
@@ -144,6 +223,40 @@
                     </div>
                 </div>
             </div>
+                @if($users instanceof \Illuminate\Pagination\LengthAwarePaginator && $users->hasPages())
+                <div class="row mt-3">
+                    <div class="col-12 d-flex justify-content-center">
+                        <ul class="pagination">
+                            {{-- Previous Page Link --}}
+                            <li class="page-item{{ $users->onFirstPage() ? ' disabled' : '' }}">
+                                <a class="page-link" href="{{ $users->previousPageUrl() ?? '#' }}" tabindex="-1" aria-disabled="{{ $users->onFirstPage() ? 'true' : 'false' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                        <path d="M15 6l-6 6l6 6"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                            {{-- Pagination Elements --}}
+                            @foreach ($users->links()->elements[0] as $page => $url)
+                                @if ($url)
+                                    <li class="page-item{{ $page == $users->currentPage() ? ' active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled"><span class="page-link">{{ $page }}</span></li>
+                                @endif
+                            @endforeach
+                            {{-- Next Page Link --}}
+                            <li class="page-item{{ $users->hasMorePages() ? '' : ' disabled' }}">
+                                <a class="page-link" href="{{ $users->nextPageUrl() ?? '#' }}" aria-disabled="{{ $users->hasMorePages() ? 'false' : 'true' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                        <path d="M9 6l6 6l-6 6"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                @endif
         </div>
     </div>
 
@@ -206,12 +319,40 @@
 @endpush
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/imask@7.1.3/dist/imask.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Inicializar tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.forEach(function (tooltipTriggerEl) {
             new bootstrap.Tooltip(tooltipTriggerEl);
         });
+        
+        // Máscara para CPF
+        const cpfInput = document.getElementById('search_cpf');
+        if (cpfInput) {
+            IMask(cpfInput, {
+                mask: '000.000.000-00'
+            });
+        }
+        
+        // Loading overlay para pesquisa
+        const searchForm = document.querySelector('form[action*="users.index"]');
+        const tableLoading = document.getElementById('table-loading');
+        const searchButton = searchForm.querySelector('button[type="submit"]');
+        
+        if (searchForm && tableLoading) {
+            searchForm.addEventListener('submit', function(e) {
+                // Mostrar loading
+                tableLoading.classList.remove('d-none');
+                
+                // Desabilitar botão de pesquisa
+                if (searchButton) {
+                    searchButton.disabled = true;
+                    searchButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i>Pesquisando...';
+                }
+            });
+        }
     });
 </script>
 @endpush

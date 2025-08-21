@@ -29,8 +29,7 @@ class UpdateUserRequest extends FormRequest
             'email' => 'required|email|unique:users,email,' . $userId,
             'cpf' => ['nullable', 'string', new CpfRule(), 'unique:users,cpf,' . $userId],
             'password' => 'nullable|string|min:6|confirmed',
-            'roles' => 'array',
-            'roles.*' => 'exists:roles,id',
+            'role' => 'nullable|string|exists:roles,name',
         ];
     }
 

@@ -49,13 +49,77 @@
                 </div>
             @endif
 
+            <!-- Filtros de Pesquisa -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="GET" action="{{ route('permissions.index') }}" class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="search_name" class="form-label">Nome da Permissão</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-solid fa-key"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="search_name" name="search_name" 
+                                               value="{{ request('search_name') }}" placeholder="Pesquisar por nome...">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="search_module" class="form-label">Módulo</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="fa-solid fa-layer-group"></i>
+                                        </span>
+                                        <select class="form-control" id="search_module" name="search_module">
+                                            <option value="">Todos os módulos</option>
+                                            <option value="dashboard" {{ request('search_module') == 'dashboard' ? 'selected' : '' }}>Dashboard</option>
+                                            <option value="usuarios" {{ request('search_module') == 'usuarios' ? 'selected' : '' }}>Usuários</option>
+                                            <option value="perfis" {{ request('search_module') == 'perfis' ? 'selected' : '' }}>Perfis</option>
+                                            <option value="permissoes" {{ request('search_module') == 'permissoes' ? 'selected' : '' }}>Permissões</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <div class="btn-group w-100" role="group">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa-solid fa-search me-1"></i>
+                                            Pesquisar
+                                        </button>
+                                        <a href="{{ route('permissions.index') }}" class="btn btn-outline-secondary">
+                                            <i class="fa-solid fa-times me-1"></i>
+                                            Limpar
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Lista de Permissões</h3>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive position-relative" id="table-container">
+                            <!-- Loading Overlay -->
+                            <div id="table-loading" class="position-absolute w-100 h-100 d-none" style="top: 0; left: 0; background: rgba(255,255,255,0.8); z-index: 10;">
+                                <div class="d-flex justify-content-center align-items-center h-100">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-primary mb-3" role="status">
+                                            <span class="visually-hidden">Carregando...</span>
+                                        </div>
+                                        <div class="text-muted">
+                                            <i class="fa-solid fa-search me-2"></i>
+                                            Pesquisando permissões...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <table class="table table-vcenter card-table">
                                 <thead>
                                     <tr>
@@ -159,6 +223,40 @@
                     </div>
                 </div>
             </div>
+                @if($permissions instanceof \Illuminate\Pagination\LengthAwarePaginator && $permissions->hasPages())
+                <div class="row mt-3">
+                    <div class="col-12 d-flex justify-content-center">
+                        <ul class="pagination">
+                            {{-- Previous Page Link --}}
+                            <li class="page-item{{ $permissions->onFirstPage() ? ' disabled' : '' }}">
+                                <a class="page-link" href="{{ $permissions->previousPageUrl() ?? '#' }}" tabindex="-1" aria-disabled="{{ $permissions->onFirstPage() ? 'true' : 'false' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                        <path d="M15 6l-6 6l6 6"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                            {{-- Pagination Elements --}}
+                            @foreach ($permissions->links()->elements[0] as $page => $url)
+                                @if ($url)
+                                    <li class="page-item{{ $page == $permissions->currentPage() ? ' active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled"><span class="page-link">{{ $page }}</span></li>
+                                @endif
+                            @endforeach
+                            {{-- Next Page Link --}}
+                            <li class="page-item{{ $permissions->hasMorePages() ? '' : ' disabled' }}">
+                                <a class="page-link" href="{{ $permissions->nextPageUrl() ?? '#' }}" aria-disabled="{{ $permissions->hasMorePages() ? 'false' : 'true' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                        <path d="M9 6l6 6l-6 6"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                @endif
         </div>
     </div>
 
@@ -223,10 +321,29 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Inicializar tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.forEach(function (tooltipTriggerEl) {
             new bootstrap.Tooltip(tooltipTriggerEl);
         });
+        
+        // Loading overlay para pesquisa
+        const searchForm = document.querySelector('form[action*="permissions.index"]');
+        const tableLoading = document.getElementById('table-loading');
+        const searchButton = searchForm ? searchForm.querySelector('button[type="submit"]') : null;
+        
+        if (searchForm && tableLoading) {
+            searchForm.addEventListener('submit', function(e) {
+                // Mostrar loading
+                tableLoading.classList.remove('d-none');
+                
+                // Desabilitar botão de pesquisa
+                if (searchButton) {
+                    searchButton.disabled = true;
+                    searchButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i>Pesquisando...';
+                }
+            });
+        }
     });
 </script>
 @endpush
