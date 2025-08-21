@@ -30,6 +30,7 @@
                     </a>
                 </li>
 
+                <!-- EXEMPLO DE MENU DROPDOWN: Use este bloco como referência para criar novos menus com subitens -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-form" data-bs-toggle="dropdown"
                         data-bs-auto-close="false" role="button" aria-expanded="false">
@@ -51,6 +52,7 @@
                         </a>
                     </div>
                 </li>
+                <!-- FIM DO EXEMPLO DE MENU DROPDOWN -->
                 <!-- Grupo: Gerenciamento de Usuários -->
                 <li class="nav-item mt-3 mb-1">
                     <span class="nav-link-title text-uppercase text-muted small fw-bold ps-3">Gerenciamento de
