@@ -124,6 +124,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Perfis</label>
+                                        <select name="roles[]" class="form-select" multiple>
+                                            @foreach($roles ?? [] as $role)
+                                                <option value="{{ $role->id }}" {{ in_array($role->id, old('roles', [])) ? 'selected' : '' }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <small class="form-hint">Selecione os perfis para este usuário (opcional)</small>
+                                        @error('roles')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer text-end">
                             <div class="d-flex">

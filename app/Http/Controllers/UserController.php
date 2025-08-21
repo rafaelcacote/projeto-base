@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +19,8 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('users.create');
+        $roles = Role::all();
+        return view('users.create', compact('roles'));
     }
 
     public function store(StoreUserRequest $request)
@@ -31,7 +33,14 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         // Salva o id do usuário autenticado
         $validated['user_id'] = auth()->id();
-        User::create($validated);
+        
+        $user = User::create($validated);
+        
+        // Atribuir perfis ao usuário
+        if ($request->has('roles')) {
+            $user->assignRole($request->roles);
+        }
+        
         return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso!');
     }
 
@@ -42,7 +51,8 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $roles = Role::all();
+        return view('users.edit', compact('user', 'roles'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -61,6 +71,14 @@ class UserController extends Controller
         }
         
         $user->update($validated);
+        
+        // Atualizar perfis do usuário
+        if ($request->has('roles')) {
+            $user->syncRoles($request->roles);
+        } else {
+            $user->syncRoles([]);
+        }
+        
         return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso!');
     }
 

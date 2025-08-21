@@ -676,6 +676,22 @@
                   <span class="nav-link-title"> Usuários </span>
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('roles.index') }}">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="fa-solid fa-user-shield fa-lg"></i>
+                  </span>
+                  <span class="nav-link-title"> Perfis </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('permissions.index') }}">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="fa-solid fa-key fa-lg"></i>
+                  </span>
+                  <span class="nav-link-title"> Permissões </span>
+                </a>
+              </li>
             </ul>
             <!-- END NAVBAR MENU -->
           </div>
